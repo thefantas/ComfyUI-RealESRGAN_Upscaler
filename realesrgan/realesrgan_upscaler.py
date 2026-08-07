@@ -142,7 +142,7 @@ def upscaler(input_img, outscale, gpu_id, tile, fp_fmt, denoise, netscale, tile_
                 tile_pad=tile_pad,
                 pre_pad=pre_pad,
                 half=(fp_fmt == "fp16"),
-                gpu_id=gpu_id
+                gpu_id = int(gpu_id)
             )
         except:
             ERROR = "💥 Oops, something went wrong!\n" + \
