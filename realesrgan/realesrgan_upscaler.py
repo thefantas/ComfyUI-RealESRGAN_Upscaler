@@ -59,12 +59,15 @@ for i in range(NUM_GPUS):
 GPU_STR = GPU_STR.lstrip().rstrip()
 
 # Create list with the GPUs numbers.
-GPU_LIST = list(range(NUM_GPUS))
+GPU_LIST = [str(i) for i in range(NUM_GPUS)]
 
 # Set some paths.
 SCRIPT_PATH = pathlib.Path(__file__).parent.resolve()
 PARENT_PATH = SCRIPT_PATH.parent.absolute()
 MODELS_PATH = ''.join([str(PARENT_PATH), "/models"])
+
+# Make sure the models directory exists (Fixed: Prevents FileNotFoundError)
+os.makedirs(MODELS_PATH, exist_ok=True)
 
 # Set file paths.
 MOD_DIR = {'RealESRGAN_x4plus.pth': 'https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth',
@@ -138,7 +141,7 @@ def upscaler(input_img, outscale, gpu_id, tile, fp_fmt, denoise, netscale, tile_
                 tile=tile,
                 tile_pad=tile_pad,
                 pre_pad=pre_pad,
-                half=not fp_fmt,
+                half=(fp_fmt == "fp16"),
                 gpu_id=gpu_id
             )
         except:
